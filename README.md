@@ -1,5 +1,5 @@
 # Python
 ### Applications
-|ID     |Folder          |Description                                       |
+|ID     |File            |Description                                       |
 |-------|----------------|--------------------------------------------------|
-|001    |applications    |ticTacToe.py                                      |
+|001    |ticTacToe.py    |2-player Tic-Tac-Toe game                         |
