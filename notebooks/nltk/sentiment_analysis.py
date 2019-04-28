@@ -49,3 +49,50 @@ print( [ t[ 0 ].text for t in computed_similarities[ :10 ] ] )
 
 # Sentiment Analysis - Unsupervised Learning
 # ==================================================
+import nltk
+
+nltk.download( 'vader_lexicon' )
+
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+sid = SentimentIntensityAnalyzer()
+
+a = 'This is a good game. BEST EVER MADE!!!'
+
+sid.polarity_scores( a )
+
+a = 'Anthem sucked and I want my money back.'
+
+sid.polarity_scores( a )
+
+import pandas as pd 
+
+df = pd.read_csv( '.\\docs\\amazonreviews.tsv', sep = '\t' )
+
+df[ 'label' ].value_counts()
+
+df.dropna( inplace = True )
+
+blanks = []
+
+for index, label, review in df.itertuples():
+    if type( review ) == str:
+        if review.isspace():
+            blanks.append( index )
+
+df.iloc[0][ 'review' ]
+sid.polarity_scores( df.iloc[0][ 'review' ] )
+
+df[ 'scores' ] = df[ 'review' ].apply( lambda review : sid.polarity_scores( review ) )
+df[ 'compound' ] = df[ 'scores' ].apply( lambda d : d[ 'compound' ] )
+
+df.head()
+
+df[ 'comp_score' ] = df[ 'compound' ].apply( lambda score : 'pos' if score >= 0 else 'neg' )
+df.head()
+
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+print( accuracy_score( df[ 'label' ], df[ 'comp_score' ] ) )
+print( classification_report( df[ 'label' ], df[ 'comp_score' ] ) )
+print( confusion_matrix( df[ 'label' ], df[ 'comp_score' ] ) )
